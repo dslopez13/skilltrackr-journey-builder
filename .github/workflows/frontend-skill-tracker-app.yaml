@@ -3,6 +3,9 @@ name: frontend-skill-tracker-app
 on:
   push:
     branches: [main]
+defaults:
+  run:
+    working-directory: frontend/skill-tracker-app
 jobs:
   ci:
     runs-on: ubuntu-latest

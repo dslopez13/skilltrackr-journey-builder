@@ -5,7 +5,7 @@ on:
   workflow_dispatch: 
 defaults:
   run:
-    working-directory: back/ms-skills-tracker
+    working-directory: backend/ms-skills-tracker
 jobs:
   ci:
     runs-on: ubuntu-latest
