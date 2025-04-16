@@ -1,0 +1,61 @@
+name: backend-ms-skill-tracker
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: 
+defaults:
+  run:
+    working-directory: back/ms-skills-tracker
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm install
+      - name: Run unit tests
+        run: npm test
+      - name: Simulate SonarQube Analysis
+        run: echo "🔍 Simulando análisis de SonarQube..."
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build Docker image
+        run: |
+          docker build -t ghcr.io/${{ github.repository }}/skilltrackr-backend:${{github.sha}} -f zarf/Dockerfile .
+      - name: Push Docker image to GHCR
+        run: |
+          docker ghcr.io/${{ github.repository }}/skilltrackr-backend:${{github.sha}}
+
+  dev:
+    name: Simulated Deploy to AWS ECS
+    runs-on: ubuntu-latest
+    needs: ci
+    env:
+       IMAGE_TAG: ghcr.io/${{ github.repository }}/skilltrackr-backend:${{github.sha}}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - uses: cschleiden/replace-tokens@v1
+        with:
+          files: '["back/ms-skills-tracker/**"]'
+        env:
+          DATABASE_URL: ${{secrets.DATABASE_URL}}
+          IMAGE_TAG: ghcr.io/${{ github.repository }}/skilltrackr-backend:${{github.sha}}
+
+      - name: Simulate Deploy to AWS ECS
+        env:
+          IMAGE_TAG: 
+        run: |
+          echo "🚀 Simulando despliegue a ECS con la imagen $IMAGE_TAG"
+          echo "aws ecs register-task-definition --cli-input-json file://zarf/task-definition.json"
+          echo "aws ecs update-service --cluster skilltrackr-cluster --service backend-service --force-new-deployment"

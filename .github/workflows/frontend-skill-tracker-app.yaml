@@ -1,0 +1,44 @@
+name: frontend-skill-tracker-app
+
+on:
+  push:
+    branches: [main]
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm install
+      - name: Run ESLint
+        run: npm run lint
+      - name: Build frontend (Vite)
+        run: npm run build
+      - name: Simulate SonarQube analysis
+        run: echo "🔍 Simulando análisis de SonarQube para frontend..."
+
+  dev:
+    name: Simulate S3 Deployment
+    runs-on: ubuntu-latest
+    needs: ci
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install and build frontend
+        run: |
+          npm install
+          npm run build
+
+      - name: Simulate deployment to S3
+        env:
+          BUCKET_NAME: my-frontend-s3-bucket
+        run: |
+          echo "📦 Simulando despliegue a AWS S3..."
+          echo "aws s3 sync dist/ s3://$BUCKET_NAME/ --delete"
