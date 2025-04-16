@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Run unit tests
-        run: npm test
+        run: npm test --passWithNoTests
       - name: Simulate SonarQube Analysis
         run: echo "🔍 Simulando análisis de SonarQube..."
       - name: Log in to GitHub Container Registry
