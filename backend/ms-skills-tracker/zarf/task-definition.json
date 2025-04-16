@@ -1,0 +1,32 @@
+{
+    "family": "skilltrackr-task",
+    "containerDefinitions": [
+      {
+        "name": "skilltrackr-backend",
+        "image": "#{IMAGE_TAG}#",
+        "essential": true,
+        "portMappings": [
+          {
+            "containerPort": 3000,
+            "hostPort": 3000
+          }
+        ],
+        "environment": [
+          {
+            "name": "NODE_ENV",
+            "value": "production"
+          },
+          {
+            "name": "DATABASE_URL",
+            "value": "#{DATABASE_URL}#"
+          }
+        ]
+      }
+    ],
+    "cpu": "256",
+    "memory": "512",
+    "networkMode": "awsvpc",
+    "requiresCompatibilities": ["FARGATE"],
+    "executionRoleArn": "#{ROLE_ARN}#"
+  }
+  
