@@ -34,7 +34,7 @@ jobs:
           docker build -t ghcr.io/${{ github.repository }}/skilltrackr-backend:${{github.sha}} -f zarf/Dockerfile .
       - name: Push Docker image to GHCR
         run: |
-          docker ghcr.io/${{ github.repository }}/skilltrackr-backend:${{github.sha}}
+          docker push ghcr.io/${{ github.repository }}/skilltrackr-backend:${{github.sha}}
 
   dev:
     name: Simulated Deploy to AWS ECS
