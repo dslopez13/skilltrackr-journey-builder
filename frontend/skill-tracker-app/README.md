@@ -11,19 +11,13 @@
 Sigue estos pasos para clonar y ejecutar el proyecto localmente:
 
 ```bash
-# 1. Clona el repositorio
-git clone <YOUR_GIT_URL>
-
-# 2. Entra en el directorio del proyecto
-cd <YOUR_PROJECT_NAME>
-
-# 3. Instala las dependencias
+# 1. Instala las dependencias
 npm install
 
-# 4. Inicia el servidor de desarrollo
+# 2. Inicia el servidor de desarrollo
 npm run dev
 
-# 5. Compular el proyecto para produccion
+# 3. Compular el proyecto para produccion
 npm run build
 ```
 
